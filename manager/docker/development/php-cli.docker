@@ -1,3 +1,7 @@
 FROM php:7.2-cli
 
+#--1 флаг для установки 1 версии компосера
+RUN curl -sS https://getcomposer.org/installer | php -- \
+--install-dir=/usr/bin --filename=composer --1 --quiet
+
 WORKDIR /app
