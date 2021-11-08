@@ -16,9 +16,13 @@ services:
       dockerfile: php-fpm.docker
     volumes:
       - ./manager:/app
+    environment:
+      APP_DEBUG: 1
   manager-php-cli:
     build:
       context: ./manager/docker/development
       dockerfile: php-cli.docker
+    environment:
+      APP_DEBUG: 1
     volumes:
       - ./manager:/app
