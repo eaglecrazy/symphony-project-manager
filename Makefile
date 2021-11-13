@@ -2,6 +2,9 @@ up: docker-up
 init: docker-down-clear docker-pull docker-build docker-up manager-init
 test: manager-test
 
+rmvendor:
+	sudo rm -rf manager/vendor
+
 docker-up:
 	docker-compose up -d
 
@@ -17,16 +20,16 @@ docker-pull:
 docker-build:
 	docker-compose build
 
-manager-init: manager-composer-install
+manager-init: manager-composer-update manager-composer-install
+
+manager-composer-update:
+	docker-compose run --rm manager-php-cli composer update
 
 manager-composer-install:
 	docker-compose run --rm manager-php-cli composer install
 
 manager-test:
 	docker-compose run --rm manager-php-cli php bin/phpunit
-
-cli:
-	docker-compose run --rm manager-php-cli php bin/app.php
 
 build-production:
 	docker build --pull --file=manager/docker/production/nginx.docker --tag ${REGISTRY_ADDRESS}/manager-nginx:${IMAGE_TAG} manager
