@@ -1,3 +1,4 @@
+
 ###> symfony/framework-bundle ###
 /.env.local
 /.env.local.php
@@ -8,6 +9,6 @@
 ###< symfony/framework-bundle ###
 
 ###> symfony/phpunit-bridge ###
-/bin/.phpunit
+.phpunit
 /phpunit.xml
 ###< symfony/phpunit-bridge ###
