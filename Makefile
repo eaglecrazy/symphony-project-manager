@@ -2,6 +2,9 @@ up: docker-up
 init: docker-down-clear docker-pull docker-build docker-up manager-init
 test: manager-test
 
+clear:
+	docker-compose run --rm  manager-php-cli php bin/console cache:clear
+
 rmvendor:
 	sudo rm -rf manager/vendor
 
