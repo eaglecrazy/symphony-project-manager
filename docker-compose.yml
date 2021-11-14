@@ -22,3 +22,16 @@ services:
             dockerfile: php-cli.docker
         volumes:
             - ./manager:/app
+    manager-postgres:
+        image: postgres:11.2-alpine
+        volumes:
+            - manager-postgres:/var/lib/postgresql/data
+        environment:
+            POSTGRES_USER: app
+            POSTGRES_PASSWORD: secret
+            POSTGRES_DB: app
+        ports:
+        - "5432:5432"
+
+volumes:
+    manager-postgres:
