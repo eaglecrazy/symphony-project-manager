@@ -25,7 +25,7 @@ class Post
     /**
      * @ORM\Column(type="text")
      */
-    private $yes;
+    private $text;
 
     public function getId(): ?int
     {
@@ -44,14 +44,14 @@ class Post
         return $this;
     }
 
-    public function getYes(): ?string
+    public function getText(): ?string
     {
-        return $this->yes;
+        return $this->text;
     }
 
-    public function setYes(string $yes): self
+    public function setText(string $text): self
     {
-        $this->yes = $yes;
+        $this->text = $text;
 
         return $this;
     }
