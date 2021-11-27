@@ -20,6 +20,13 @@
             padding-right: 15px;
             padding-left: 15px;
         }
+
+        .controls > * {
+            margin-right: 4px;
+        }
+        .controls > *:last-child {
+            margin-right: 0;
+        }
     </style>
     {% block stylesheets %}{% endblock %}
 </head>
@@ -34,8 +41,11 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav ml-auto">
-                    <li class="nav-item active">
+                    <li class="nav-item">
                         <a class="nav-link" href="{{ path('home') }}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('post_index') }}">Posts</a>
                     </li>
                 </ul>
             </div>
