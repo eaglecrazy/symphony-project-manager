@@ -6,13 +6,14 @@ namespace App\Tests\Unit\Model\User\Entity\User\SIgnUp;
 
 use App\Model\User\Entity\User\User;
 use PHPUnit\Framework\TestCase;
+use Ramsey\Uuid\Uuid;
 
 class RequestTest extends TestCase
 {
     public function testSuccess(): void
     {
         $user = new User(
-            $id = 25,
+            $id = Uuid::uuid4()->toString(),
             $email = 'test@app.test',
             $hash = 'hash'
         );
