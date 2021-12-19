@@ -12,10 +12,12 @@ class RequestTest extends TestCase
     public function testSuccess(): void
     {
         $user = new User(
+            $id = 25,
             $email = 'test@app.test',
             $hash = 'hash'
         );
 
+        self::assertEquals($id, $user->getId());
         self::assertEquals($email, $user->getEmail());
         self::assertEquals($hash, $user->getPasswordHash());
     }
