@@ -4,37 +4,50 @@ declare(strict_types=1);
 
 namespace App\Model\User\UseCase\SignUp\Request;
 
+use App\Model\Flusher;
+use App\Model\User\Entity\User\Email;
+use App\Model\User\Entity\User\Id;
 use App\Model\User\Entity\User\User;
+use App\Model\User\Entity\User\UserRepository;
+use App\Model\User\Service\PasswordHasher;
 use DateTimeImmutable;
-use Doctrine\ORM\EntityManager;
 use DomainException;
-use Ramsey\Uuid\Uuid;
 
 class Handler
 {
-    private $em;
+    /** @var UserRepository */
+    private $users;
 
-    public function __construct(EntityManager $em)
+    /** @var PasswordHasher */
+    private $hasher;
+
+    /** @var Flusher */
+    private $flusher;
+
+    public function __construct(UserRepository $users, PasswordHasher $hasher, Flusher $flusher)
     {
-        $this->em = $em;
+        $this->users   = $users;
+        $this->hasher  = $hasher;
+        $this->flusher = $flusher;
     }
 
-    public function handle(Command $command)
+    public function handle(Command $command): void
     {
-        $email = mb_strtolower($command->email);
+        $email = new Email($command->email);
 
-        if ($this->em->getRepository(User::class)->findOneBy(['email' => $email])) {
-            throw new DomainException('Пользователь уже существует.');
+        if ($this->users->hasByEmail($email)) {
+            throw new DomainException('Пользователь с таким емейлом уже существует.');
         }
 
         $user = new User(
-            Uuid::uuid4()->toString(),
+            Id::next(),
             new DateTimeImmutable(),
             $email,
-            password_hash($command->password, PASSWORD_ARGON2I)
+            $this->hasher->hash($command->password)
         );
 
-        $this->em->persist($user);
-        $this->em->flush();
+        $this->users->add($user);
+
+        $this->flusher->flush();
     }
 }

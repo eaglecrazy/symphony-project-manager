@@ -8,27 +8,19 @@ use DateTimeImmutable;
 
 class User
 {
-    /**
-     * @var string
-     */
+    /** @var Id */
     private $id;
 
-    /**
-     * @var DateTimeImmutable
-     */
+    /** @var DateTimeImmutable */
     private $date;
 
-    /**
-     * @var string
-     */
+    /** @var Email */
     private $email;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $passwordHash;
 
-    public function __construct(string $id, DateTimeImmutable $date, string $email, string $hash)
+    public function __construct(Id $id, DateTimeImmutable $date, Email $email, string $hash)
     {
         $this->id           = $id;
         $this->date         = $date;
@@ -37,25 +29,9 @@ class User
     }
 
     /**
-     * @return string
+     * @return Id
      */
-    public function getEmail(): string
-    {
-        return $this->email;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPasswordHash(): string
-    {
-        return $this->passwordHash;
-    }
-
-    /**
-     * @return string
-     */
-    public function getId(): string
+    public function getId(): Id
     {
         return $this->id;
     }
@@ -66,5 +42,21 @@ class User
     public function getDate(): DateTimeImmutable
     {
         return $this->date;
+    }
+
+    /**
+     * @return Email
+     */
+    public function getEmail(): Email
+    {
+        return $this->email;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPasswordHash(): string
+    {
+        return $this->passwordHash;
     }
 }
