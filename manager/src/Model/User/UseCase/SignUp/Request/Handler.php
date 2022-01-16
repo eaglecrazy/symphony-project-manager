@@ -9,6 +9,8 @@ use App\Model\User\Entity\User\Email;
 use App\Model\User\Entity\User\Id;
 use App\Model\User\Entity\User\User;
 use App\Model\User\Entity\User\UserRepository;
+use App\Model\User\Service\ConfirmTokenizer;
+use App\Model\User\Service\ConfirmTokenSender;
 use App\Model\User\Service\PasswordHasher;
 use DateTimeImmutable;
 use DomainException;
@@ -24,11 +26,24 @@ class Handler
     /** @var Flusher */
     private $flusher;
 
-    public function __construct(UserRepository $users, PasswordHasher $hasher, Flusher $flusher)
-    {
-        $this->users   = $users;
-        $this->hasher  = $hasher;
-        $this->flusher = $flusher;
+    /** @var ConfirmTokenizer */
+    private $tokenizer;
+
+    /** @var ConfirmTokenSender */
+    private $sender;
+
+    public function __construct(
+        UserRepository $users,
+        PasswordHasher $hasher,
+        ConfirmTokenizer $tokenizer,
+        ConfirmTokenSender $sender,
+        Flusher $flusher
+    ) {
+        $this->users     = $users;
+        $this->hasher    = $hasher;
+        $this->flusher   = $flusher;
+        $this->tokenizer = $tokenizer;
+        $this->sender    = $sender;
     }
 
     public function handle(Command $command): void
@@ -39,14 +54,19 @@ class Handler
             throw new DomainException('Пользователь с таким емейлом уже существует.');
         }
 
+        $token = $this->tokenizer->generate();
+
         $user = new User(
             Id::next(),
             new DateTimeImmutable(),
             $email,
-            $this->hasher->hash($command->password)
+            $this->hasher->hash($command->password),
+            $token
         );
 
         $this->users->add($user);
+
+        $this->sender->send($email, $token);
 
         $this->flusher->flush();
     }
