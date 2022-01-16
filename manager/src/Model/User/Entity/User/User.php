@@ -24,18 +24,24 @@ class User
     private $passwordHash;
 
     /** @var string */
-    private $token;
+    private $confirmToken;
 
     /** @var string */
     private $status;
 
-    public function __construct(Id $id, DateTimeImmutable $date, Email $email, string $hash, string $token)
+    public function __construct(
+        Id $id,
+        DateTimeImmutable $date,
+        Email $email,
+        string $hash,
+        string $token
+    )
     {
         $this->id           = $id;
         $this->date         = $date;
         $this->email        = $email;
         $this->passwordHash = $hash;
-        $this->token        = $token;
+        $this->confirmToken = $token;
         $this->status       = self::STATUS_WAIT;
     }
 
@@ -74,9 +80,9 @@ class User
     /**
      * @return string
      */
-    public function getConfirmToken(): string
+    public function getConfirmToken(): ?string
     {
-        return $this->token;
+        return $this->confirmToken;
     }
 
     /**
@@ -93,5 +99,18 @@ class User
     public function isActive(): bool
     {
         return $this->status === self::STATUS_ACTIVE;
+    }
+
+    /**
+     *
+     */
+    public function confirmSignUp(): void
+    {
+        if (!$this->isWait()) {
+            throw new \DomainException('Пользователь уже подтверждён.');
+        }
+
+        $this->status       = self::STATUS_ACTIVE;
+        $this->confirmToken = null;
     }
 }
