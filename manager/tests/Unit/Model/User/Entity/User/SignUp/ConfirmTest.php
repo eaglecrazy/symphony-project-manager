@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\Model\User\Entity\User\SIgnUp;
+namespace App\Tests\Unit\Model\User\Entity\User\SignUp;
 
 use App\Model\User\Entity\User\Email;
 use App\Model\User\Entity\User\Id;
@@ -38,12 +38,10 @@ class ConfirmTest extends TestCase
 
     private function buildSignedUser(): User
     {
-        return new User(
-            Id::next(),
-            new DateTimeImmutable(),
-            new Email('test@app.test'),
-            'hash',
-            'token'
-        );
+        $user = new User(Id::next(), new DateTimeImmutable());
+
+        $user->signUpByEmail(new Email('test@app.test'), 'hash', 'token');
+
+        return $user;
     }
 }

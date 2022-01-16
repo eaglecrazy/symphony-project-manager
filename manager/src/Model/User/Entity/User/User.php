@@ -5,9 +5,12 @@ declare(strict_types=1);
 namespace App\Model\User\Entity\User;
 
 use DateTimeImmutable;
+use Doctrine\Common\Collections\ArrayCollection;
+use DomainException;
 
 class User
 {
+    private const STATUS_NEW    = 'new';
     private const STATUS_WAIT   = 'wait';
     private const STATUS_ACTIVE = 'active';
 
@@ -29,20 +32,42 @@ class User
     /** @var string */
     private $status;
 
-    public function __construct(
-        Id $id,
-        DateTimeImmutable $date,
-        Email $email,
-        string $hash,
-        string $token
-    )
+    /** @var Network[]|ArrayCollection */
+    private $networks;
+
+    public function __construct(Id $id, DateTimeImmutable $date)
     {
-        $this->id           = $id;
-        $this->date         = $date;
+        $this->id       = $id;
+        $this->date     = $date;
+        $this->status   = self::STATUS_NEW;
+        $this->networks = new ArrayCollection();
+    }
+
+    /**
+     * @param Email $email
+     * @param string $hash
+     * @param string $token
+     */
+    public function signUpByEmail(Email $email, string $hash, string $token)
+    {
+        if (!$this->isNew()) {
+            throw new DomainException('Пользователь уже вошёл в систему.');
+        }
+
         $this->email        = $email;
         $this->passwordHash = $hash;
         $this->confirmToken = $token;
         $this->status       = self::STATUS_WAIT;
+    }
+
+    public function signUpByNetwork(string $network, string $identity)
+    {
+        if (!$this->isNew()) {
+            throw new DomainException('Пользователь уже вошёл в систему.');
+        }
+
+        $this->attachNetwork($network, $identity);
+        $this->status = self::STATUS_ACTIVE;
     }
 
     /**
@@ -88,6 +113,14 @@ class User
     /**
      * @return bool
      */
+    public function isNew(): bool
+    {
+        return $this->status === self::STATUS_NEW;
+    }
+
+    /**
+     * @return bool
+     */
     public function isWait(): bool
     {
         return $this->status === self::STATUS_WAIT;
@@ -107,10 +140,33 @@ class User
     public function confirmSignUp(): void
     {
         if (!$this->isWait()) {
-            throw new \DomainException('Пользователь уже подтверждён.');
+            throw new DomainException('Пользователь уже подтверждён.');
         }
 
         $this->status       = self::STATUS_ACTIVE;
         $this->confirmToken = null;
+    }
+
+    /**
+     * @param string $network
+     * @param string $identity
+     */
+    private function attachNetwork(string $network, string $identity): void
+    {
+        foreach ($this->networks as $existing) {
+            if ($existing->isForNetwork($network)) {
+                throw new DomainException('Социальная сеть уже назначена.');
+            }
+        }
+
+        $this->networks->add(new Network($this, $network, $identity));
+    }
+
+    /**
+     * @return Network[]
+     */
+    public function getNetworks(): array
+    {
+        return $this->networks->toArray();
     }
 }
