@@ -4,18 +4,14 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\Model\User\Entity\User\SignUp;
 
-use App\Model\User\Entity\User\Email;
-use App\Model\User\Entity\User\Id;
-use App\Model\User\Entity\User\User;
-use DateTimeImmutable;
+use App\Tests\Builder\User\UserBuilder;
 use PHPUnit\Framework\TestCase;
-use Ramsey\Uuid\Uuid;
 
 class ConfirmTest extends TestCase
 {
     public function testSuccess(): void
     {
-        $user = $this->buildSignedUser();
+        $user = (new UserBuilder())->viaEmail()->build();
 
         $user->confirmSignUp();
 
@@ -27,21 +23,12 @@ class ConfirmTest extends TestCase
 
     public function testAlready(): void
     {
-        $user = $this->buildSignedUser();
+        $user = (new UserBuilder())->viaEmail()->build();
 
         $user->confirmSignUp();
 
         $this->expectExceptionMessage('Пользователь уже подтверждён.');
 
         $user->confirmSignUp();
-    }
-
-    private function buildSignedUser(): User
-    {
-        $user = new User(Id::next(), new DateTimeImmutable());
-
-        $user->signUpByEmail(new Email('test@app.test'), 'hash', 'token');
-
-        return $user;
     }
 }
