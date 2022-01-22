@@ -35,6 +35,9 @@ class User
     /** @var Network[]|ArrayCollection */
     private $networks;
 
+    /** @var ResetToken */
+    private $resetToken;
+
     public function __construct(Id $id, DateTimeImmutable $date)
     {
         $this->id       = $id;
@@ -168,5 +171,30 @@ class User
     public function getNetworks(): array
     {
         return $this->networks->toArray();
+    }
+
+    /**
+     * @param ResetToken $token
+     * @param DateTimeImmutable $date
+     */
+    public function requestPasswordReset(ResetToken $token, DateTimeImmutable $date): void
+    {
+        if (!$this->email) {
+            throw new DomainException('У пользователя не указан email.');
+        }
+
+        if ($this->resetToken && !$this->resetToken->isExpiredTo($date)) {
+            throw new DomainException('Срок действия предыдущего токена ещё не истёк.');
+        }
+
+        $this->resetToken = $token;
+    }
+
+    /**
+     * @return ResetToken
+     */
+    public function getResetToken(): ResetToken
+    {
+        return $this->resetToken;
     }
 }
