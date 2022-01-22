@@ -193,8 +193,22 @@ class User
     /**
      * @return ResetToken
      */
-    public function getResetToken(): ResetToken
+    public function getResetToken(): ?ResetToken
     {
         return $this->resetToken;
+    }
+
+    public function passwordReset(DateTimeImmutable $date, string $hash)
+    {
+        if (!$this->resetToken){
+            throw new DomainException('Сброс пароля не был запрошен.');
+        }
+
+        if ($this->resetToken->isExpiredTo($date)){
+            throw new DomainException('Токен просрочен.');
+        }
+
+        $this->passwordHash = $hash;
+        $this->resetToken = null;
     }
 }
