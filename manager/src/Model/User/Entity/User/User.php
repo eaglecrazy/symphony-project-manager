@@ -183,6 +183,10 @@ class User
             throw new DomainException('У пользователя не указан email.');
         }
 
+        if (!$this->isActive()) {
+            throw new DomainException('Пользователь не активирован.');
+        }
+
         if ($this->resetToken && !$this->resetToken->isExpiredTo($date)) {
             throw new DomainException('Срок действия предыдущего токена ещё не истёк.');
         }
@@ -200,15 +204,15 @@ class User
 
     public function passwordReset(DateTimeImmutable $date, string $hash)
     {
-        if (!$this->resetToken){
+        if (!$this->resetToken) {
             throw new DomainException('Сброс пароля не был запрошен.');
         }
 
-        if ($this->resetToken->isExpiredTo($date)){
+        if ($this->resetToken->isExpiredTo($date)) {
             throw new DomainException('Токен просрочен.');
         }
 
         $this->passwordHash = $hash;
-        $this->resetToken = null;
+        $this->resetToken   = null;
     }
 }
