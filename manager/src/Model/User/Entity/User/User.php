@@ -38,11 +38,16 @@ class User
     /** @var ResetToken */
     private $resetToken;
 
+    /** @var Role */
+    private $role;
+
     private function __construct(Id $id, DateTimeImmutable $date)
     {
         $this->id       = $id;
         $this->date     = $date;
         $this->networks = new ArrayCollection();
+
+        $this->role = Role::user();
     }
 
     /**
@@ -232,5 +237,22 @@ class User
 
         $this->passwordHash = $hash;
         $this->resetToken   = null;
+    }
+
+    public function changeRole(Role $role)
+    {
+        if ($this->role->isEqual($role)) {
+            throw new DomainException('Эта роль уже назначена');
+        }
+
+        $this->role = $role;
+    }
+
+    /**
+     * @return Role
+     */
+    public function getRole(): Role
+    {
+        return $this->role;
     }
 }
