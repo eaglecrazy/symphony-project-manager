@@ -35,12 +35,12 @@ class Handler
             throw new DomainException('Пользователь уже существует');
         }
 
-        $user = new User(
+        $user = User::signUpByNetwork(
             Id::next(),
-            new DateTimeImmutable()
+            new DateTimeImmutable(),
+            $command->network,
+            $command->identity
         );
-
-        $user->signUpByNetwork($command->network, $command->identity);
 
         $this->users->add($user);
 

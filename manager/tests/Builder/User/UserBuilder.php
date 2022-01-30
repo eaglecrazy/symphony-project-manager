@@ -5,6 +5,7 @@ namespace App\Tests\Builder\User;
 use App\Model\User\Entity\User\Email;
 use App\Model\User\Entity\User\Id;
 use App\Model\User\Entity\User\User;
+use BadMethodCallException;
 use DateTimeImmutable;
 
 class UserBuilder
@@ -71,20 +72,30 @@ class UserBuilder
 
     public function build(): User
     {
-        $user = new User($this->id, $this->date);
-
         if ($this->email) {
-            $user->signUpByEmail($this->email, $this->hash, $this->token);
+            $user = User::signUpByEmail(
+                $this->id,
+                $this->date,
+                $this->email,
+                $this->hash,
+                $this->token
+            );
 
             if ($this->confirmed) {
                 $user->confirmSignUp();
             }
+
+            return $user;
         }
 
         if ($this->network) {
-            $user->signUpByNetwork($this->network, $this->identity);
+            return User::signUpByNetwork(
+                $this->id,
+                $this->date,
+                $this->network,
+                $this->identity);
         }
 
-        return $user;
+        throw new BadMethodCallException('Необходимо уточнить метод создания пользователя.');
     }
 }

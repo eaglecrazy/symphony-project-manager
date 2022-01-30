@@ -66,10 +66,10 @@ class RequestTest extends TestCase
 
     public function testWithoutEmail(): void
     {
-        $user = (new UserBuilder())->build();
-
         $now   = new DateTimeImmutable();
         $token = new ResetToken('token', $now->modify('+1 day'));
+
+        $user = (new UserBuilder())->viaNetwork()->build();
 
         $this->expectExceptionMessage('У пользователя не указан email.');
 
