@@ -22,6 +22,7 @@ class User
 
     /**
      * @var Id
+     * @ORM\Id
      * @ORM\Column (type="user_user_id")
      */
     private $id;
