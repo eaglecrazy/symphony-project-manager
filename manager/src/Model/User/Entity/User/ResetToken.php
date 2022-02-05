@@ -19,7 +19,7 @@ class ResetToken
 
     /**
      * @var DateTimeImmutable
-     * @ORM\Column (type="datetime_immutable", nullable="true")
+     * @ORM\Column (type="datetime_immutable", nullable=true)
      */
     private $expires;
 

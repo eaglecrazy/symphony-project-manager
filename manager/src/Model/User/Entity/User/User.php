@@ -11,10 +11,10 @@ use DomainException;
 
 /**
  * @ORM\Entity
- * @ORM\HasLifecycleCallbacks()
+ * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="user_users", uniqueConstraints={
- *      @ORM\UniqueConstraint(cloumns={"email"}),
- *      @ORM\UniqueConstraint(cloumns={"reset_token_token"}),
+ *      @ORM\UniqueConstraint(columns={"email"}),
+ *      @ORM\UniqueConstraint(columns={"reset_token_token"}),
  *     })
  */
 class User
@@ -37,8 +37,8 @@ class User
     private $date;
 
     /**
-     * @var Email
-     * @ORM\Column (type="user_user_email", nullable="true")
+     * @var Email|null
+     * @ORM\Column (type="user_user_email", nullable=true)
      */
     private $email;
 
@@ -60,7 +60,10 @@ class User
      */
     private $status;
 
-    /** @var Network[]|ArrayCollection */
+    /**
+     * @var Network[]|ArrayCollection
+     * @ORM\OneToMany(targetEntity="Network", mappedBy="user", orphanRemoval=true, cascade="persist")
+     */
     private $networks;
 
     /**
@@ -71,7 +74,7 @@ class User
 
     /**
      * @var Role
-     * @ORM\Column (type="user_user_role")
+     * @ORM\Column (type="user_user_role", length=16)
      */
     private $role;
 
