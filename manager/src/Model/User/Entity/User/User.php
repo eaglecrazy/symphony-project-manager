@@ -20,7 +20,10 @@ class User
     private const STATUS_WAIT   = 'wait';
     private const STATUS_ACTIVE = 'active';
 
-    /** @var Id */
+    /**
+     * @var Id
+     * @ORM\Column (type="user_user_id")
+     */
     private $id;
 
     /**
@@ -29,7 +32,10 @@ class User
      */
     private $date;
 
-    /** @var Email */
+    /**
+     * @var Email
+     * @ORM\Column (type="user_user_email", nullable="true")
+     */
     private $email;
 
     /**
@@ -59,7 +65,10 @@ class User
      */
     private $resetToken;
 
-    /** @var Role */
+    /**
+     * @var Role
+     * @ORM\Column (type="user_user_role")
+     */
     private $role;
 
     private function __construct(Id $id, DateTimeImmutable $date)
