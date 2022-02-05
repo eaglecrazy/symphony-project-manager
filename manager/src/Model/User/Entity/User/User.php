@@ -12,7 +12,10 @@ use DomainException;
 /**
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks()
- * @ORM\Table(name="user_users")
+ * @ORM\Table(name="user_users", uniqueConstraints={
+ *      @ORM\UniqueConstraint(cloumns={"email"}),
+ *      @ORM\UniqueConstraint(cloumns={"reset_token_token"}),
+ *     })
  */
 class User
 {
