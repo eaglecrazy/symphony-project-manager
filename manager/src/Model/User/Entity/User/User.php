@@ -6,8 +6,14 @@ namespace App\Model\User\Entity\User;
 
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
 use DomainException;
 
+/**
+ * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks()
+ * @ORM\Table(name="user_users")
+ */
 class User
 {
     private const STATUS_NEW    = 'new';
@@ -17,25 +23,40 @@ class User
     /** @var Id */
     private $id;
 
-    /** @var DateTimeImmutable */
+    /**
+     * @var DateTimeImmutable
+     * @ORM\Column (type="datetime_immutable")
+     */
     private $date;
 
     /** @var Email */
     private $email;
 
-    /** @var string */
+    /**
+     * @var string|null
+     * @ORM\Column (type="string", nullable=true, name="password_hash")
+     */
     private $passwordHash;
 
-    /** @var string */
+    /**
+     * @var string|null
+     * @ORM\Column (type="string", nullable=true, name="confirm_token")
+     */
     private $confirmToken;
 
-    /** @var string */
+    /**
+     * @var string
+     * @ORM\Column (type="string", length=16)
+     */
     private $status;
 
     /** @var Network[]|ArrayCollection */
     private $networks;
 
-    /** @var ResetToken */
+    /**
+     * @var ResetToken
+     * @ORM\Embedded(class="ResetToken", columnPrefix="reset_token_")
+     */
     private $resetToken;
 
     /** @var Role */
@@ -254,5 +275,15 @@ class User
     public function getRole(): Role
     {
         return $this->role;
+    }
+
+    /**
+     * @ORM\PostLoad()
+     */
+    public function checkEmbeds(): void
+    {
+        if ($this->resetToken->isEmpty()) {
+            $this->resetToken = null;
+        }
     }
 }
