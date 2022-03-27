@@ -43,10 +43,10 @@ class ConfirmTokenSender
             ->setFrom($this->form)
             ->setTo($email->getValue())
             ->setBody($this->twig->render('mail/user/signup.html.twig', [
-                $token => $token,
+                'token' => $token,
             ]), 'text/html');
 
-        if(!$this->mailer->send($message)) {
+        if (!$this->mailer->send($message)) {
             throw new RuntimeException('Unable to send message.');
         }
     }
