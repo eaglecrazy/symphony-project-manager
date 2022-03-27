@@ -11,6 +11,7 @@ use App\Model\User\UseCase\Reset\Request\Handler as RequestHandler;
 use App\Model\User\UseCase\Reset\Reset\Command as ResetCommand;
 use App\Model\User\UseCase\Reset\Reset\Form as ResetForm;
 use App\Model\User\UseCase\Reset\Reset\Handler as ResetHandler;
+use App\ReadModel\User\UserFetcher;
 use DomainException;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -64,8 +65,13 @@ class ResetController extends AbstractController
      * @param ResetHandler $handler
      * @return Response
      */
-    public function reset(string $token, Request $request, ResetHandler $handler): Response
+    public function reset(string $token, Request $request, ResetHandler $handler, UserFetcher $users): Response
     {
+        if (!$users->existByResetToken($token)) {
+            $this->addFlash('error', 'Incorrect or already confirmed token.');
+            return $this->redirectToRoute('home');
+        }
+
         $command = new ResetCommand($token);
 
         $form = $this->createForm(ResetForm::class, $command);
