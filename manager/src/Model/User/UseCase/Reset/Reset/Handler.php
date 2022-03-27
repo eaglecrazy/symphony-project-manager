@@ -39,7 +39,7 @@ class Handler
         $user = $this->users->findByResetToken($command->token);
 
         if (!$user) {
-            throw new DomainException('Некорректный токен.');
+            throw new DomainException('Incorrect or confirmed token.');
         }
 
         $user->passwordReset(new DateTimeImmutable(), $this->hasher->hash($command->password));

@@ -118,7 +118,7 @@ class User
     public function confirmSignUp(): void
     {
         if (!$this->isWait()) {
-            throw new DomainException('Пользователь уже подтверждён.');
+            throw new DomainException('User is already confirmed.');
         }
 
         $this->status       = self::STATUS_ACTIVE;
@@ -218,7 +218,7 @@ class User
     {
         foreach ($this->networks as $existing) {
             if ($existing->isForNetwork($network)) {
-                throw new DomainException('Социальная сеть уже назначена.');
+                throw new DomainException('Network is already attached.');
             }
         }
 
@@ -240,15 +240,15 @@ class User
     public function requestPasswordReset(ResetToken $token, DateTimeImmutable $date): void
     {
         if (!$this->email) {
-            throw new DomainException('У пользователя не указан email.');
+            throw new DomainException('Email is not specified.');
         }
 
         if (!$this->isActive()) {
-            throw new DomainException('Пользователь не активирован.');
+            throw new DomainException('User is not active.');
         }
 
         if ($this->resetToken && !$this->resetToken->isExpiredTo($date)) {
-            throw new DomainException('Срок действия предыдущего токена ещё не истёк.');
+            throw new DomainException('Resetting is already requested.');
         }
 
         $this->resetToken = $token;
@@ -265,11 +265,11 @@ class User
     public function passwordReset(DateTimeImmutable $date, string $hash)
     {
         if (!$this->resetToken) {
-            throw new DomainException('Сброс пароля не был запрошен.');
+            throw new DomainException('Resetting is not requested.');
         }
 
         if ($this->resetToken->isExpiredTo($date)) {
-            throw new DomainException('Токен просрочен.');
+            throw new DomainException('Reset token is expired.');
         }
 
         $this->passwordHash = $hash;
@@ -279,7 +279,7 @@ class User
     public function changeRole(Role $role)
     {
         if ($this->role->isEqual($role)) {
-            throw new DomainException('Эта роль уже назначена');
+            throw new DomainException('Role is already same.');
         }
 
         $this->role = $role;

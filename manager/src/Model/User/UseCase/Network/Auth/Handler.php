@@ -32,7 +32,7 @@ class Handler
     public function handle(Command $command): void
     {
         if ($this->users->hasByNetworkIdentity($command->network, $command->identity)) {
-            throw new DomainException('Пользователь уже существует');
+            throw new DomainException('User already exists.');
         }
 
         $user = User::signUpByNetwork(

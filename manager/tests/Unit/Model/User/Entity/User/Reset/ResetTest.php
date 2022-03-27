@@ -39,7 +39,7 @@ class ResetTest extends TestCase
 
         $user->requestPasswordReset($token, $now);
 
-        self::expectExceptionMessage('Токен просрочен.');
+        self::expectExceptionMessage('Reset token is expired.');
 
         $user->passwordReset($now->modify('+1 day'), 'hash');
     }
@@ -50,7 +50,7 @@ class ResetTest extends TestCase
 
         $now = new DateTimeImmutable();
 
-        self::expectExceptionMessage('Сброс пароля не был запрошен.');
+        self::expectExceptionMessage('Resetting is not requested.');
 
         $user->passwordReset($now, 'hash');
     }

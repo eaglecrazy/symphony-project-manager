@@ -33,7 +33,7 @@ class Handler
         $user = $this->users->findByConfirmToken($command->token);
 
         if(!$user){
-            throw new DomainException('Некорректный токен');
+            throw new DomainException('Incorrect or confirmed token.');
         }
 
         $user->confirmSignUp();

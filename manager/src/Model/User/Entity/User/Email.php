@@ -3,6 +3,7 @@
 namespace App\Model\User\Entity\User;
 
 use InvalidArgumentException;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Webmozart\Assert\Assert;
 
 class Email

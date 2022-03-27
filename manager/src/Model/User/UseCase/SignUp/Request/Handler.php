@@ -51,7 +51,7 @@ class Handler
         $email = new Email($command->email);
 
         if ($this->users->hasByEmail($email)) {
-            throw new DomainException('Пользователь с таким емейлом уже существует.');
+            throw new DomainException('User already exists.');
         }
 
         $token = $this->tokenizer->generate();

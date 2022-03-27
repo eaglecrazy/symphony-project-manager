@@ -54,7 +54,7 @@ class UserRepository
         $user = $this->repo->find($id->getValue());
 
         if (!$user) {
-            throw new EntityNotFoundException('Пользователь не найден.');
+            throw new EntityNotFoundException('User is not found.');
         }
 
         return $user;
@@ -69,7 +69,7 @@ class UserRepository
         $user = $this->repo->findOneBy(['email' => $email->getValue()]);
 
         if (!$user) {
-            throw new EntityNotFoundException('Пользователь не найден.');
+            throw new EntityNotFoundException('User is not found.');
         }
 
         return $user;

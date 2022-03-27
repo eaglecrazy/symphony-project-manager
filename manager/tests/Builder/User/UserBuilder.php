@@ -96,6 +96,6 @@ class UserBuilder
                 $this->identity);
         }
 
-        throw new BadMethodCallException('Необходимо уточнить метод создания пользователя.');
+        throw new BadMethodCallException('Specify via method.');
     }
 }
