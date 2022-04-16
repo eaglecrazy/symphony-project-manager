@@ -2,7 +2,7 @@
 {% block body %}
     <p>Ссылка для подтверждения email:</p>
 
-    {% set url = url('auth.signup.confirm', {'token'}: token) %}
+    {% set url = url('auth.signup.confirm', {'token': token}) %}
 
     <p><a href="{{ url }}">{{ url }}</a></p>
 {% endblock %}

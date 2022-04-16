@@ -74,7 +74,7 @@ class User
 
     /**
      * @var Role
-     * @ORM\Column (type="user_user_role", length=16)
+     * @ORM\Column(type="user_user_role", length=16)
      */
     private $role;
 
