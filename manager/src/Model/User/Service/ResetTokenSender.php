@@ -22,26 +22,18 @@ class ResetTokenSender
     private $twig;
 
     /**
-     * @var array
-     */
-    private $form;
-
-    /**
      * @param Swift_Mailer $mailer
      * @param Environment $twig
-     * @param array $from
      */
-    public function __construct(Swift_Mailer $mailer, Environment $twig, array $from)
+    public function __construct(Swift_Mailer $mailer, Environment $twig)
     {
         $this->mailer = $mailer;
         $this->twig   = $twig;
-        $this->form   = $from;
     }
 
     public function send(Email $email, ResetToken $token): void
     {
         $message = (new Swift_Message('Password resetting.'))
-            ->setFrom($this->form)
             ->setTo($email->getValue())
             ->setBody($this->twig->render('mail/user/reset.html.twig', [
                 'token' => $token->getToken(),
