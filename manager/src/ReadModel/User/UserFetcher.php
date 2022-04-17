@@ -25,7 +25,7 @@ class UserFetcher
         return $this->connection->createQueryBuilder()
                 ->select('COUNT (*)')
                 ->from('user_users')
-                ->where('reset_token = :token')
+                ->where('reset_token_token = :token')
                 ->setParameter(':token', $token)
                 ->execute()
                 ->fetchColumn(0) > 0;
