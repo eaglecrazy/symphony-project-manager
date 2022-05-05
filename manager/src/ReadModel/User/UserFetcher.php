@@ -32,7 +32,7 @@ class UserFetcher
                 ->fetchColumn(0) > 0;
     }
 
-    public function findForAuth(string $email): ?AuthView
+    public function findForAuthByEmail(string $email): ?AuthView
     {
         $stmt = $this->connection->createQueryBuilder()
             ->select(
@@ -45,6 +45,30 @@ class UserFetcher
             ->from('user_users')
             ->where('email = :email')
             ->setParameter(':email', $email)
+            ->execute();
+
+        $stmt->setFetchMode(FetchMode::CUSTOM_OBJECT, AuthView::class);
+
+        $result = $stmt->fetch();
+
+        return $result ?: null;
+    }
+
+    public function findForAuthByNetwork(string $network, string $identity)
+    {
+        $stmt = $this->connection->createQueryBuilder()
+            ->select(
+                'u.id',
+                'u.email',
+                'u.password_hash',
+                'u.role',
+                'u.status'
+            )
+            ->from('user_users', 'u')
+            ->innerJoin('u', 'user_user_networks', 'n', 'n.user_id = u.id')
+            ->where('n.network = :network AND n.identity = :identity')
+            ->setParameter(':network', $network)
+            ->setParameter(':identity', $identity)
             ->execute();
 
         $stmt->setFetchMode(FetchMode::CUSTOM_OBJECT, AuthView::class);
