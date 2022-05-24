@@ -1,5 +1,5 @@
 up: docker-up
-init: docker-down-clear docker-pull docker-build docker-up manager-init manager-wait-db manager-migrations  manager-fixtures
+init: docker-down-clear docker-pull docker-build docker-up manager-init
 test: manager-test
 
 clear:
@@ -23,7 +23,10 @@ docker-pull:
 docker-build:
 	docker-compose build
 
-manager-init: manager-composer-update manager-composer-install
+manager-init: manager-composer-install manager-assets-install manager-wait-db manager-migrations manager-fixtures
+
+manager-assets-install:
+	docker-compose run --rm manager-node yarn install --ignore-engines
 
 manager-composer-update:
 	docker-compose run --rm manager-php-cli composer update
