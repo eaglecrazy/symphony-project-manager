@@ -1,6 +1,9 @@
 up: docker-up
-init: docker-down-clear docker-pull docker-build docker-up manager-init
+down: docker-down
+restart: docker-down docker-up
 test: manager-test
+
+init: docker-down-clear manager-clear docker-pull docker-build docker-up manager-init
 
 clear:
 	docker-compose run --rm  manager-php-cli php bin/console cache:clear
@@ -23,7 +26,10 @@ docker-pull:
 docker-build:
 	docker-compose build
 
-manager-init: manager-composer-install manager-assets-install manager-wait-db manager-migrations manager-fixtures
+manager-init: manager-composer-install manager-assets-install manager-wait-db manager-migrations manager-fixtures manager-ready
+
+manager-clear:
+	docker run --rm -v ${PWD}/manager:/app --workdir=/app alpine rm -f .ready
 
 manager-assets-install:
 	docker-compose run --rm manager-node yarn install --ignore-engines
@@ -43,6 +49,9 @@ manager-migrations:
 manager-fixtures:
 	docker-compose run --rm manager-php-cli php bin/console doctrine:fixtures:load --no-interaction
 
+manager-ready:
+	docker run --rm -v ${PWD}/manager:/app --workdir=/app alpine touch .ready
+
 manager-make-migrations:
 	docker-compose run --rm manager-php-cli php bin/console make:migration
 
@@ -51,6 +60,9 @@ manager-test:
 
 manager-assets-dev:
 	docker-compose run --rm manager-node npm run dev
+
+manager-assets-watch:
+	docker-compose run --rm manager-node npm run watch
 
 build-production:
 	docker build --pull --file=manager/docker/production/nginx.docker --tag ${REGISTRY_ADDRESS}/manager-nginx:${IMAGE_TAG} manager
