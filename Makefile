@@ -33,6 +33,7 @@ manager-clear:
 
 manager-assets-install:
 	docker-compose run --rm manager-node yarn install --ignore-engines
+	docker-compose run --rm manager-node npm rebuild node-sass
 
 manager-composer-update:
 	docker-compose run --rm manager-php-cli composer update
