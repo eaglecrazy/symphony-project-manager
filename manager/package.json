@@ -17,13 +17,10 @@
         "simple-line-icons": "^2.4.1"
     },
     "devDependencies": {
-        "@symfony/stimulus-bridge": "^2.0.0",
-        "@symfony/webpack-encore": "^1.0.0",
+        "@symfony/webpack-encore": "^0.27.0",
         "core-js": "^3.0.0",
-        "regenerator-runtime": "^0.13.2",
-        "stimulus": "^2.0.0",
-        "webpack-notifier": "^1.6.0",
         "node-sass": "^4.11.0",
-        "sass-loader": "^7.1.0"
+        "sass-loader": "^7.1.0",
+        "webpack-notifier": "^1.6.0"
     }
 }
