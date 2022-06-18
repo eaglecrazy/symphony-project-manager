@@ -8,9 +8,6 @@ use App\Model\Flusher;
 use App\Model\User\Entity\User\Id;
 use App\Model\User\Entity\User\Role;
 use App\Model\User\Entity\User\UserRepository;
-use App\Model\User\Service\PasswordHasher;
-use DateTimeImmutable;
-use DomainException;
 
 class Handler
 {
@@ -20,12 +17,8 @@ class Handler
     /** @var Flusher */
     private $flusher;
 
-    public function __construct(
-        UserRepository $users,
-        PasswordHasher $hasher,
-        Flusher $flusher
-
-    ) {
+    public function __construct(UserRepository $users, Flusher $flusher)
+    {
         $this->users   = $users;
         $this->flusher = $flusher;
     }
