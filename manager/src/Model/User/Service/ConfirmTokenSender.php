@@ -33,6 +33,7 @@ class ConfirmTokenSender
     public function send(Email $email, string $token): void
     {
         $message = (new Swift_Message('Подтверждение email'))
+//            ->setFrom('username@gmail.com')
             ->setTo($email->getValue())
             ->setBody($this->twig->render('mail/user/signup.html.twig', [
                 'token' => $token,

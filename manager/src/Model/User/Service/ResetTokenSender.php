@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Model\User\Service;
 
 use App\Model\User\Entity\User\Email;
@@ -34,6 +36,7 @@ class ResetTokenSender
     public function send(Email $email, ResetToken $token): void
     {
         $message = (new Swift_Message('Password resetting.'))
+//            ->setFrom('username@gmail.com')
             ->setTo($email->getValue())
             ->setBody($this->twig->render('mail/user/reset.html.twig', [
                 'token' => $token->getToken(),

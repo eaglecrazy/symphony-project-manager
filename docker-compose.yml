@@ -19,7 +19,7 @@ services:
         depends_on:
             - manager-postgres
             - manager-redis
-#            - mailer
+            - mailer
     manager-php-cli:
         build:
             context: ./manager/docker/development
@@ -29,7 +29,7 @@ services:
         depends_on:
             - manager-postgres
             - manager-redis
-#            - mailer
+            - mailer
     manager-node-watch:
         image: node:11.13-alpine
         volumes:
@@ -56,10 +56,10 @@ services:
         volumes:
             - manager-redis:/data
         command: redis-server --requirepass secret
-#    mailer:
-#        image: mailhog/mailhog
-#        ports:
-#            - "8081:8025"
+    mailer:
+        image: mailhog/mailhog
+        ports:
+            - "8081:8025"
 
 volumes:
     manager-postgres:
