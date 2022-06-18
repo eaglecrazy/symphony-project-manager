@@ -5,13 +5,12 @@ declare(strict_types=1);
 namespace App\Controller\Auth;
 
 use App\Model\User\UseCase\SignUp;
-use App\Model\User\UseCase\SignUp\Confirm\Command as ConfirmCommand;
+use App\Model\User\UseCase\SignUp\Confirm\ByToken\Command as ConfirmCommand;
+use App\Model\User\UseCase\SignUp\Confirm\ByToken\Handler as ConfirmHandler;
 use App\Model\User\UseCase\SignUp\Request\Command as RequestCommand;
 use App\Model\User\UseCase\SignUp\Request\Form;
 use App\Model\User\UseCase\SignUp\Request\Handler as RequestHandler;
-use App\Model\User\UseCase\SignUp\Confirm\Handler as ConfirmHandler;
 use DomainException;
-use phpDocumentor\Reflection\Types\This;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
