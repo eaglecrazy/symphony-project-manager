@@ -70,7 +70,7 @@ class SignUpController extends AbstractController
      * @param ConfirmHandler $handler
      * @return Response
      */
-    public function comfirm(string $token, ConfirmHandler $handler): Response {
+    public function confirm(string $token, ConfirmHandler $handler): Response {
         $command = new ConfirmCommand($token);
 
         try {

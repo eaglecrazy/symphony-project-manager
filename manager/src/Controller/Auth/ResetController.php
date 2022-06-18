@@ -63,6 +63,7 @@ class ResetController extends AbstractController
      * @param string $token
      * @param Request $request
      * @param ResetHandler $handler
+     * @param UserFetcher $users
      * @return Response
      */
     public function reset(string $token, Request $request, ResetHandler $handler, UserFetcher $users): Response
