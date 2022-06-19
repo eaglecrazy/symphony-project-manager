@@ -19,7 +19,6 @@ use DomainException;
  */
 class User
 {
-    public const STATUS_NEW    = 'new';
     public const STATUS_WAIT   = 'wait';
     public const STATUS_ACTIVE = 'active';
 
@@ -184,14 +183,6 @@ class User
     public function getConfirmToken(): ?string
     {
         return $this->confirmToken;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isNew(): bool
-    {
-        return $this->status === self::STATUS_NEW;
     }
 
     /**
