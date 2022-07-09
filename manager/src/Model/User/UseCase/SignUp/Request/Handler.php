@@ -9,8 +9,8 @@ use App\Model\User\Entity\User\Email;
 use App\Model\User\Entity\User\Id;
 use App\Model\User\Entity\User\User;
 use App\Model\User\Entity\User\UserRepository;
-use App\Model\User\Service\ConfirmTokenizer;
-use App\Model\User\Service\ConfirmTokenSender;
+use App\Model\User\Service\SignupConfirmTokenizer;
+use App\Model\User\Service\SignupConfirmTokenSender;
 use App\Model\User\Service\PasswordHasher;
 use DateTimeImmutable;
 use DomainException;
@@ -26,17 +26,17 @@ class Handler
     /** @var Flusher */
     private $flusher;
 
-    /** @var ConfirmTokenizer */
+    /** @var SignupConfirmTokenizer */
     private $tokenizer;
 
-    /** @var ConfirmTokenSender */
+    /** @var SignupConfirmTokenSender */
     private $sender;
 
     public function __construct(
         UserRepository $users,
         PasswordHasher $hasher,
-        ConfirmTokenizer $tokenizer,
-        ConfirmTokenSender $sender,
+        SignupConfirmTokenizer $tokenizer,
+        SignupConfirmTokenSender $sender,
         Flusher $flusher
     ) {
         $this->users     = $users;

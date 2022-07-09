@@ -8,7 +8,7 @@ use Swift_Mailer;
 use Swift_Message;
 use Twig\Environment;
 
-class ConfirmTokenSender
+class SignupConfirmTokenSender
 {
     /**
      * @var Swift_Mailer
