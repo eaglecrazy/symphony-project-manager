@@ -135,4 +135,25 @@ class UserFetcher
 
         return $view;
     }
+
+    public function findBySignupConfirmToken(string $token)
+    {
+        $stmt = $this->connection->createQueryBuilder()
+            ->select(
+                'id',
+                'email',
+                'role',
+                'status'
+            )
+            ->from('user_users')
+            ->where('confirm_token = :token')
+            ->setParameter(':token', $token)
+            ->execute();
+
+        $stmt->setFetchMode(FetchMode::CUSTOM_OBJECT, ShortView::class);
+
+        $result = $stmt->fetch();
+
+        return $result ?: null;
+    }
 }
