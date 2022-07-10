@@ -11,7 +11,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ShowController extends AbstractController
 {
-
     /**
      * @var UserFetcher
      */

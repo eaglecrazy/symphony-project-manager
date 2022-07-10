@@ -8,7 +8,7 @@ use Swift_Mailer;
 use Swift_Message;
 use Twig\Environment;
 
-class SignupConfirmTokenSender
+class NewEmailConfirmTokenSender
 {
     /**
      * @var Swift_Mailer
@@ -34,7 +34,7 @@ class SignupConfirmTokenSender
     {
         $message = (new Swift_Message('Подтверждение email'))
             ->setTo($email->getValue())
-            ->setBody($this->twig->render('mail/user/signup.html.twig', [
+            ->setBody($this->twig->render('mail/user/email.html.twig', [
                 'token' => $token,
             ]), 'text/html');
 

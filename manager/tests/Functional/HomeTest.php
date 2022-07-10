@@ -29,6 +29,6 @@ class HomeTest extends WebTestCase
         $client->request('GET', '/');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertSame('Hello world!', $crawler->filter('h1')->text());
+        $this->assertSame('Hello!', $crawler->filter('h1')->text());
     }
 }
