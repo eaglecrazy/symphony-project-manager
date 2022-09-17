@@ -16,10 +16,13 @@ services:
             dockerfile: php-fpm.docker
         volumes:
             - ./manager:/app
+            - ./manager/docker/development/php-fpm/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
         depends_on:
             - manager-postgres
             - manager-redis
             - mailer
+        environment:
+            - PHP_IDE_CONFIG=serverName=project-manager
     manager-php-cli:
         build:
             context: ./manager/docker/development
