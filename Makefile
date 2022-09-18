@@ -98,6 +98,11 @@ manager-assets-dev:  ## npm run dev
 manager-assets-watch:  ## npm run watch
 	docker-compose run --rm manager-node npm run watch
 
+.PHONY: routes
+routes:  ## просмотр списка роутов
+	docker-compose run --rm manager-php-cli php bin/console debug:router
+
+
 build-production:
 	docker build --pull --file=manager/docker/production/nginx.docker --tag ${REGISTRY_ADDRESS}/manager-nginx:${IMAGE_TAG} manager
 	docker build --pull --file=manager/docker/production/php-fpm.docker --tag ${REGISTRY_ADDRESS}/manager-php-fpm:${IMAGE_TAG} manager

@@ -22,6 +22,13 @@ class GithubController extends AbstractController
     }
 
     /**
+     * На этот роут редиректит гитхаб когда пользователь аутентифицируется там.
+     * Впрочем, это не важно, так как после редиректа в GithubAuthenticator отработает метод
+     * onAuthenticationSuccess и редирект будет в другое место.
+     *
+     * Хрен знает почему тут не работает dd() и отладка.
+     * В App\Controller\Profile\OAuthGithubController она работает.
+     *
      * @Route("/oauth/github/check", name="oauth.github_check")
      * @return Response
      */

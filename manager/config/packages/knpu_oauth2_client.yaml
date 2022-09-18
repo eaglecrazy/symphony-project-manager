@@ -5,6 +5,12 @@ knpu_oauth2_client:
       type: github
       client_id: '%env(OAUTH_GITHUB_ID)%'
       client_secret: '%env(OAUTH_GITHUB_SECRET)%'
+      #на этот роут редиректит гитхаб когда пользователь аутентифицируется там
       redirect_route: oauth.github_check
       redirect_params: { }
-  #    graph_api_version: v.2.12
+    github_attach:
+      type: github
+      client_id: '%env(OAUTH_GITHUB_ID)%'
+      client_secret: '%env(OAUTH_GITHUB_SECRET)%'
+      redirect_route: profile.oauth.github_check
+      redirect_params: { }

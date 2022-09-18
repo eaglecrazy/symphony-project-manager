@@ -4,18 +4,16 @@ namespace App\Security\OAuth;
 
 use App\Model\User\UseCase\Network\Auth\Command;
 use App\Model\User\UseCase\Network\Auth\Handler;
-use KnpU\OAuth2ClientBundle\Client\OAuth2Client;
+use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
+use KnpU\OAuth2ClientBundle\Client\OAuth2ClientInterface;
 use KnpU\OAuth2ClientBundle\Client\Provider\GithubClient;
 use KnpU\OAuth2ClientBundle\Security\Authenticator\SocialAuthenticator;
-use KnpU\OAuth2ClientBundle\Client\Provider\FacebookClient;
-use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
@@ -49,7 +47,7 @@ class GithubAuthenticator extends SocialAuthenticator
         return new RedirectResponse($this->urlGenerator->generate('/login'));
     }
 
-    public function supports(Request $request)
+    public function supports(Request $request): bool
     {
         return $request->attributes->get('_route') === 'oauth.github_check';
     }
@@ -59,7 +57,7 @@ class GithubAuthenticator extends SocialAuthenticator
         return $this->fetchAccessToken($this->getGithubClient());
     }
 
-    public function getUser($credentials, UserProviderInterface $userProvider)
+    public function getUser($credentials, UserProviderInterface $userProvider): UserInterface
     {
         $githubUser = $this->getGithubClient()->fetchUserFromToken($credentials);
 
@@ -75,20 +73,28 @@ class GithubAuthenticator extends SocialAuthenticator
         }
     }
 
-    public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
+    public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
     {
         $message = strtr($exception->getMessageKey(), $exception->getMessageData());
 
         return new Response($message, Response::HTTP_FORBIDDEN);
     }
 
-    public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
+    /**
+     * Возвращает роут, на который происходит редирект после аутентификации.
+     *
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Symfony\Component\Security\Core\Authentication\Token\TokenInterface $token
+     * @param $providerKey
+     * @return \Symfony\Component\HttpFoundation\Response|null
+     */
+    public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey): ?Response
     {
-        return new RedirectResponse($this->urlGenerator->generate('home'));
+        return new RedirectResponse($this->urlGenerator->generate('profile'));
     }
 
     /**
-     * @return FacebookClient|GithubClient
+     * @return OAuth2ClientInterface|GithubClient
      */
     private function getGithubClient(): GithubClient
     {
