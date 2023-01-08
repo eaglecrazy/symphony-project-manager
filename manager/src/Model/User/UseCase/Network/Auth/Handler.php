@@ -5,13 +5,10 @@ declare(strict_types=1);
 namespace App\Model\User\UseCase\Network\Auth;
 
 use App\Model\Flusher;
-use App\Model\User\Entity\User\Email;
 use App\Model\User\Entity\User\Id;
+use App\Model\User\Entity\User\Name;
 use App\Model\User\Entity\User\User;
 use App\Model\User\Entity\User\UserRepository;
-use App\Model\User\Service\SignupConfirmTokenizer;
-use App\Model\User\Service\SignupConfirmTokenSender;
-use App\Model\User\Service\PasswordHasher;
 use DateTimeImmutable;
 use DomainException;
 
@@ -35,9 +32,12 @@ class Handler
             throw new DomainException('User already exists.');
         }
 
+        $name = new Name($command->firstName, $command->lastName);
+
         $user = User::signUpByNetwork(
             Id::next(),
             new DateTimeImmutable(),
+            $name,
             $command->network,
             $command->identity
         );

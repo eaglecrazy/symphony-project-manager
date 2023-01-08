@@ -4,6 +4,7 @@ namespace App\Tests\Builder\User;
 
 use App\Model\User\Entity\User\Email;
 use App\Model\User\Entity\User\Id;
+use App\Model\User\Entity\User\Name;
 use App\Model\User\Entity\User\User;
 use BadMethodCallException;
 use DateTimeImmutable;
@@ -18,6 +19,9 @@ class UserBuilder
 
     /** @var Email */
     private $email;
+
+    /** @var Name */
+    private $name;
 
     /** @var string */
     private $hash;
@@ -37,6 +41,7 @@ class UserBuilder
     {
         $this->id   = Id::next();
         $this->date = new DateTimeImmutable();
+        $this->name = new Name('First', 'Last');
     }
 
     public function viaEmail(Email $email = null, string $hash = null, string $token = null): self
@@ -76,6 +81,7 @@ class UserBuilder
             $user = User::signUpByEmail(
                 $this->id,
                 $this->date,
+                $this->name,
                 $this->email,
                 $this->hash,
                 $this->token
@@ -92,6 +98,7 @@ class UserBuilder
             return User::signUpByNetwork(
                 $this->id,
                 $this->date,
+                $this->name,
                 $this->network,
                 $this->identity);
         }

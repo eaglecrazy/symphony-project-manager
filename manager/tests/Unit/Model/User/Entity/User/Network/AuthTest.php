@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Unit\Model\User\Entity\User\Network;
 
 use App\Model\User\Entity\User\Id;
+use App\Model\User\Entity\User\Name;
 use App\Model\User\Entity\User\Network;
 use App\Model\User\Entity\User\User;
 use App\Tests\Builder\User\UserBuilder;
@@ -17,12 +18,14 @@ class AuthTest extends TestCase
     {
         $id       = Id::next();
         $date     = new DateTimeImmutable();
+        $name     = new Name('First', 'Last');
         $network  = 'vk';
         $identity = '01';
 
         $user = User::signUpByNetwork(
             $id,
             $date,
+            $name,
             $network,
             $identity
         );
@@ -31,6 +34,7 @@ class AuthTest extends TestCase
 
         self::assertEquals($id, $user->getId());
         self::assertEquals($date, $user->getDate());
+        self::assertEquals($name, $user->getName());
 
         $networks = $user->getNetworks();
         self::assertCount(1, $networks);

@@ -6,6 +6,7 @@ namespace App\Tests\Unit\Model\User\Entity\User\SignUp;
 
 use App\Model\User\Entity\User\Email;
 use App\Model\User\Entity\User\Id;
+use App\Model\User\Entity\User\Name;
 use App\Model\User\Entity\User\User;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
@@ -16,6 +17,7 @@ class RequestTest extends TestCase
     {
         $id    = Id::next();
         $date  = new DateTimeImmutable();
+        $name = new Name('First', 'Last');
         $email = new Email('test@app.test');
         $hash  = 'hash';
         $token = 'token';
@@ -23,6 +25,7 @@ class RequestTest extends TestCase
         $user = User::signUpByEmail(
             $id,
             $date,
+            $name,
             $email,
             $hash,
             $token

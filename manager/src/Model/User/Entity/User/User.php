@@ -54,6 +54,12 @@ class User
     private $confirmToken;
 
     /**
+     * @var Name
+     * @ORM\Embedded(class="Name")
+     */
+    private $name;
+
+    /**
      * @var Email|null
      * @ORM\Column(type="user_user_email", name="new_email", nullable=true)
      */
@@ -89,10 +95,11 @@ class User
      */
     private $role;
 
-    private function __construct(Id $id, DateTimeImmutable $date)
+    private function __construct(Id $id, DateTimeImmutable $date, Name $name)
     {
         $this->id       = $id;
         $this->date     = $date;
+        $this->name     = $name;
         $this->networks = new ArrayCollection();
 
         $this->role = Role::user();
@@ -101,6 +108,7 @@ class User
     /**
      * @param Id $id
      * @param DateTimeImmutable $date
+     * @param Name $name
      * @param Email $email
      * @param string $hash
      * @param string $token
@@ -109,11 +117,12 @@ class User
     public static function signUpByEmail(
         Id $id,
         DateTimeImmutable $date,
+        Name $name,
         Email $email,
         string $hash,
         string $token
     ): self {
-        $user = new self ($id, $date);
+        $user = new self ($id, $date, $name);
 
         $user->email        = $email;
         $user->passwordHash = $hash;
@@ -139,6 +148,7 @@ class User
     /**
      * @param Id $id
      * @param DateTimeImmutable $date
+     * @param Name $name
      * @param string $network
      * @param string $identity
      * @return static
@@ -146,10 +156,11 @@ class User
     public static function signUpByNetwork(
         Id $id,
         DateTimeImmutable $date,
+        Name $name,
         string $network,
         string $identity
     ): self {
-        $user = new self($id, $date);
+        $user = new self($id, $date, $name);
 
         $user->attachNetwork($network, $identity);
         $user->status = self::STATUS_ACTIVE;
@@ -195,6 +206,11 @@ class User
     public function getConfirmToken(): ?string
     {
         return $this->confirmToken;
+    }
+
+    public function getName(): Name
+    {
+        return $this->name;
     }
 
     public function getNewEmail(): ?Email
@@ -325,6 +341,11 @@ class User
         $this->email         = $this->newEmail;
         $this->newEmail      = null;
         $this->newEmailToken = null;
+    }
+
+    public function changeName(Name $name)
+    {
+        $this->name = $name;
     }
 
     public function changeRole(Role $role)

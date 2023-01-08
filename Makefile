@@ -75,6 +75,10 @@ manager-wait-db:  ## ожидание перед применением фикс
 manager-migrations:  ## запуск миграций
 	docker-compose run --rm manager-php-cli php bin/console doctrine:migrations:migrate --no-interaction
 
+.PHONY: manager-migration-rollback
+manager-migration-rollback:  ## откат последней миграции
+	docker-compose run --rm manager-php-cli php bin/console doctrine:migrations:migrate prev --no-interaction
+
 .PHONY: manager-fixtures
 manager-fixtures: ## запуск фикстур
 	docker-compose run --rm manager-php-cli php bin/console doctrine:fixtures:load --no-interaction

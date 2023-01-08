@@ -65,10 +65,15 @@ class GithubAuthenticator extends SocialAuthenticator
         $id       = $githubUser->getId();
         $username = $network . ':' . $id;
 
+        $command = new Command($network, $id);
+
+        $command->firstName = $githubUser->getName();
+        $command->lastName  = $githubUser->getNickname();
+
         try {
             return $userProvider->loadUserByUsername($username);
         } catch (UsernameNotFoundException $e) {
-            $this->handler->handle(new Command($network, $id));
+            $this->handler->handle($command);
             return $userProvider->loadUserByUsername($username);
         }
     }

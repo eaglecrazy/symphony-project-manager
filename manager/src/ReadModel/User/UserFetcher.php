@@ -4,6 +4,7 @@ namespace App\ReadModel\User;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\FetchMode;
+use LogicException;
 
 class UserFetcher
 {
@@ -105,6 +106,8 @@ class UserFetcher
             ->select(
                 'id',
                 'date',
+                'name_first first_name',
+                'name_last last_name',
                 'email',
                 'role',
                 'status'
@@ -155,5 +158,16 @@ class UserFetcher
         $result = $stmt->fetch();
 
         return $result ?: null;
+    }
+
+    public function getDetail(string $id): DetailView
+    {
+        $detail = $this->findDetail($id);
+
+        if (!$detail) {
+            throw new LogicException('User not found');
+        }
+
+        return $detail;
     }
 }
