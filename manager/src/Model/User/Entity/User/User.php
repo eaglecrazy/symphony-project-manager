@@ -246,12 +246,35 @@ class User
     public function attachNetwork(string $network, string $identity): void
     {
         foreach ($this->networks as $existing) {
+            /** @var Network $existing */
             if ($existing->isForNetwork($network)) {
                 throw new DomainException('Network is already attached.');
             }
         }
 
         $this->networks->add(new Network($this, $network, $identity));
+    }
+
+    /**
+     * @param string $network
+     * @param string $identity
+     */
+    public function detachNetwork(string $network, string $identity): void
+    {
+        foreach ($this->networks as $existing) {
+            /** @var Network $existing */
+            if ($existing->isFor($network, $identity)) {
+                if (!$this->email && $this->networks->count() === 1) {
+                    throw new DomainException('Unable to detach the last identity');
+                }
+
+                $this->networks->removeElement($existing);
+
+                return;
+            }
+        }
+
+        throw new DomainException('Network is not attached.');
     }
 
     /**
